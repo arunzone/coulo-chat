@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-message-recipient-table
+      author: arun
+      comment: "Setup recipient table"
+      changes:
+        - createTable:
+            tableName: message_recipient
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: message_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_message_recipient_message
+                    references: message(id)
+              - column:
+                  name: recipient_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_message_recipient_user_recipient
+                    references: user(id)
+
+  - changeSet:
+      id: sequence_message_recipient_id
+      author: arun
+      comment: "Setup sequence message recipient table id generation"
+      changes:
+        - createSequence:
+            dataType: int
+            startValue: 1
+            incrementBy: 1
+            sequenceName: sequence_message_recipient_id

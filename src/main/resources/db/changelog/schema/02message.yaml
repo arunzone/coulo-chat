@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-message-table
+      author: arun
+      comment: "Setup message table"
+      changes:
+        - createTable:
+            tableName: message
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: content
+                  type: varchar(4000)
+              - column:
+                  name: sender_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_message_user_sender
+                    references: user(id)
+
+  - changeSet:
+      id: sequence_message_id
+      author: arun
+      comment: "Setup sequence message table id generation"
+      changes:
+        - createSequence:
+            dataType: int
+            startValue: 1
+            incrementBy: 1
+            sequenceName: sequence_message_id

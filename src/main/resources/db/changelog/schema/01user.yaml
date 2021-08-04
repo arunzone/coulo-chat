@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user-table
+      author: arun
+      comment: "Setup user table"
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(320)
+
+  - changeSet:
+      id: insert-initial-user-data
+      author: arun
+      changes:
+        - loadData:
+            file: db/changelog/data/user.csv
+            separator: ;
+            tableName: user
+            columns:
+              - column:
+                  name: id
+              - column:
+                  name: email
