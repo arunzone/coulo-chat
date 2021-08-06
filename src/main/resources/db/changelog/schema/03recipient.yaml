@@ -38,3 +38,20 @@ databaseChangeLog:
             startValue: 1
             incrementBy: 1
             sequenceName: sequence_message_recipient_id
+
+  - changeSet:
+      id: insert-initial-message-recipient-test-data
+      author: arun
+      context: test
+      changes:
+        - loadData:
+            file: db/changelog/data/test/recipient.csv
+            separator: ;
+            tableName: message_recipient
+            columns:
+              - column:
+                  name: id
+              - column:
+                  name: message_id
+              - column:
+                  name: recipient_id

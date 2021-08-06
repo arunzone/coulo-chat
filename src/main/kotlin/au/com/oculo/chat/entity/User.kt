@@ -9,9 +9,9 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "user", schema = "public")
-data class User(
+class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: UUID = UUID.fromString(""),
-    val email: String
+    var id: UUID? = null,
+    var email: String
 )

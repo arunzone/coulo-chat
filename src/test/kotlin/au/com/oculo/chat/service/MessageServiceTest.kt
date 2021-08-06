@@ -41,7 +41,7 @@ internal class MessageServiceTest : ShouldSpec() {
             every { userRepository.findById(recipientId) } answers { Optional.of(recipient) }
             every { messageRepository.save(any()) } answers {
                 val savedMessage = Message(content = "Hi", sender = sender)
-                savedMessage.addRecipient(MessageRecipient(message = savedMessage, recipient = recipient))
+                savedMessage.recipients.add(MessageRecipient(message = savedMessage, recipient = recipient))
                 savedMessage
             }
 

@@ -14,7 +14,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "message", schema = "public")
-data class Message(
+class Message(
     @Id
     @GeneratedValue(generator = "sequence_message_id")
     @GenericGenerator(
@@ -25,18 +25,12 @@ data class Message(
             Parameter(name = "initial_value", value = "1"),
             Parameter(name = "increment_size", value = "1")]
     )
-    val id: Long = -1,
-    val content: String,
+    var id: Long? = null,
+    var content: String,
     @OneToOne
     @JoinColumn(name = "sender_id")
-    val sender: User,
-) {
-    @OneToMany(cascade = [(CascadeType.ALL)], fetch = FetchType.LAZY, mappedBy = "message")
-    private val _recipients = mutableListOf<MessageRecipient>()
-
-    val recipients get() = _recipients.toList()
-
-    fun addRecipient(newItem: MessageRecipient) {
-        _recipients += newItem
-    }
-}
+    var sender: User,
+    @OneToMany(cascade = [(CascadeType.ALL)], fetch = FetchType.LAZY)
+    @JoinColumn(name = "message_id", referencedColumnName = "id")
+    var recipients: MutableList<MessageRecipient> = mutableListOf()
+)

@@ -1,6 +1,7 @@
 package au.com.oculo.chat.service
 
 import au.com.oculo.chat.dto.MessageDto
+import au.com.oculo.chat.dto.ViewMessageDto
 import au.com.oculo.chat.entity.Message
 import au.com.oculo.chat.entity.MessageRecipient
 import au.com.oculo.chat.entity.User
@@ -8,6 +9,7 @@ import au.com.oculo.chat.repository.MessageRepository
 import au.com.oculo.chat.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.*
 import javax.transaction.Transactional
 
 @Service
@@ -29,8 +31,8 @@ class MessageService(
     private fun messagFrom(savedMessage: Message) = MessageDto(
         id = savedMessage.id,
         content = savedMessage.content,
-        sender = savedMessage.sender.id,
-        recipients = savedMessage.recipients.map { it.recipient.id }
+        sender = savedMessage.sender.id!!,
+        recipients = savedMessage.recipients.map { it.recipient.id!! }
     )
 
     private fun buildMessage(sender: User, recipients: List<User>, content: String): Message {
@@ -39,9 +41,17 @@ class MessageService(
             sender = sender
         )
         recipients.forEach {
-            val recipient = MessageRecipient(message = message, recipient = it)
-            message.addRecipient(recipient)
+            message.recipients.add(MessageRecipient(message = message, recipient = it))
         }
+
         return message
     }
+
+    fun readMessages(sender: UUID, recipient: UUID): List<ViewMessageDto> {
+        val messages = messageRepository.findAllBySender_IdAndRecipients_RecipientId(senderId = sender, recipientId = recipient)
+        return if (messages.isNullOrEmpty()) emptyList() else toViewable(messages)
+    }
+
+    private fun toViewable(messages: List<Message>) =
+        messages.map { ViewMessageDto(it.id!!, it.content, it.sender.id!!) }
 }

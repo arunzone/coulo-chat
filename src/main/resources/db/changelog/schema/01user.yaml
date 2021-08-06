@@ -30,3 +30,17 @@ databaseChangeLog:
                   name: id
               - column:
                   name: email
+  - changeSet:
+      id: insert-initial-user-test-data
+      author: arun
+      context: test
+      changes:
+        - loadData:
+            file: db/changelog/data/test/user.csv
+            separator: ;
+            tableName: user
+            columns:
+              - column:
+                  name: id
+              - column:
+                  name: email
