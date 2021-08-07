@@ -40,7 +40,7 @@ internal class MessageServiceTest : ShouldSpec() {
             every { userRepository.findById(userId) } answers { Optional.of(sender) }
             every { userRepository.findById(recipientId) } answers { Optional.of(recipient) }
             every { messageRepository.save(any()) } answers {
-                val savedMessage = Message(content = "Hi", sender = sender)
+                val savedMessage = Message(id = 1, content = "Hi", sender = sender)
                 savedMessage.recipients.add(MessageRecipient(message = savedMessage, recipient = recipient))
                 savedMessage
             }
@@ -49,7 +49,10 @@ internal class MessageServiceTest : ShouldSpec() {
             val message = messageService.addMessage(messageDto)
 
             should("have message Hi") {
-                verify { messageRepository.save(Message(content = "Hi", sender = sender)) }
+                verify { messageRepository.save(withArg { it.content shouldBe "Hi" }) }
+            }
+            should("have sender") {
+                verify { messageRepository.save(withArg { it.sender shouldBe sender }) }
             }
             should("have recipients") {
                 verify {
@@ -60,7 +63,7 @@ internal class MessageServiceTest : ShouldSpec() {
                 }
             }
             should("respond with message details") {
-                val expectedMessage = MessageDto(id = -1, content = "Hi", sender = userId, recipients = listOf(recipientId))
+                val expectedMessage = MessageDto(id = 1, content = "Hi", sender = userId, recipients = listOf(recipientId))
                 message shouldBe expectedMessage
             }
         }

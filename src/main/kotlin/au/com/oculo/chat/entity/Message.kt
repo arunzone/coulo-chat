@@ -4,7 +4,6 @@ import org.hibernate.annotations.GenericGenerator
 import org.hibernate.annotations.Parameter
 import javax.persistence.CascadeType
 import javax.persistence.Entity
-import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.JoinColumn
@@ -30,7 +29,7 @@ class Message(
     @OneToOne
     @JoinColumn(name = "sender_id")
     var sender: User,
-    @OneToMany(cascade = [(CascadeType.ALL)], fetch = FetchType.LAZY)
+    @OneToMany(cascade = [(CascadeType.ALL)])
     @JoinColumn(name = "message_id", referencedColumnName = "id")
     var recipients: MutableList<MessageRecipient> = mutableListOf()
 )

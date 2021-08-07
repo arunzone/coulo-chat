@@ -1,4 +1,10 @@
 db:
+  url: jdbc:postgresql
+  port: 5432
+  name: postgres
   server: localhost
   username: postgres
   secret: xKeye1RL9yIJf0BBwk40fQsGMjPzmmxtqyrLmZ94B8Sg4hoF8T
+
+liquibase:
+  contexts: dev

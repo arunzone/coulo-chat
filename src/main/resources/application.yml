@@ -10,7 +10,7 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
   datasource:
-    url: jdbc:postgresql://${db.server}/postgres
+    url: ${db.driver}://${db.server}:${db.port}/${db.name}
     username: ${db.username}
     password: ${db.secret}
 

@@ -16,15 +16,30 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
+import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.junit.jupiter.Testcontainers
 import java.net.URI
 import java.util.*
 
 
+@Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = ["test"])
-class OculoChatApplicationTests(@Autowired val restTemplate: TestRestTemplate) {
+class OculoChatApplicationTests(
+    @Autowired private val restTemplate: TestRestTemplate,
+) {
     @LocalServerPort
     var randomServerPort = 0
+
+    companion object {
+        @Container
+        val container = PostgreSQLContainer<Nothing>("postgres:13").apply {
+            withDatabaseName("postgres")
+            withExposedPorts(5435)
+        }
+
+    }
 
     @Test
     fun `should send new message`() {
@@ -50,7 +65,8 @@ class OculoChatApplicationTests(@Autowired val restTemplate: TestRestTemplate) {
     }
 
     @Test
-    fun `should receive a message`() {
+    fun `should receive messages`() {
+
         val sender = UUID.fromString("83cd7615-f247-4811-8265-8d89c5615be9")
         val recipient = UUID.fromString("0fd581e1-f1b7-4a18-b146-ceeac7adadc4")
         val baseUrl = "http://localhost:$randomServerPort/api/messages?recipient=$recipient&sender=$sender"
@@ -63,8 +79,8 @@ class OculoChatApplicationTests(@Autowired val restTemplate: TestRestTemplate) {
 
         val body = result.body
         body!!.shouldContainExactly(
-            ViewMessageDto(-1, "Hello", sender),
-            ViewMessageDto(-2, "Wasup", sender)
+            ViewMessageDto(1, "Hello", sender),
+            ViewMessageDto(2, "Wasup", sender)
         )
     }
 

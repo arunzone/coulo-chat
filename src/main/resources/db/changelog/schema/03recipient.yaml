@@ -51,6 +51,8 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
+                  type: SEQUENCE
+                  defaultValue: sequence_message_recipient_id
               - column:
                   name: message_id
               - column:

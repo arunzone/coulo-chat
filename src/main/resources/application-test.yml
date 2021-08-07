@@ -1,4 +1,9 @@
 db:
-  server: localhost
-  username: postgres
-  secret: xKeye1RL9yIJf0BBwk40fQsGMjPzmmxtqyrLmZ94B8Sg4hoF8T
+  driver: jdbc:tc:postgresql:13
+  name: postgres
+  username: test
+  secret: test
+  port: 5435
+
+liquibase:
+  contexts: test

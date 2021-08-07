@@ -58,6 +58,8 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
+                  type: SEQUENCE
+                  defaultValue: sequence_message_id
               - column:
                   name: content
               - column:

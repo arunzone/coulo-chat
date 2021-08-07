@@ -30,6 +30,7 @@ repositories {
 }
 
 val kotestVersion = "4.2.6"
+val testContainers = "1.16.0"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -44,7 +45,8 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
     testImplementation("io.kotest:kotest-property:$kotestVersion")
     testImplementation("io.mockk:mockk:1.12.0")
-
+    testImplementation("org.testcontainers:postgresql:$testContainers")
+    testImplementation("org.testcontainers:junit-jupiter:$testContainers")
 }
 
 tasks.withType<KotlinCompile> {
