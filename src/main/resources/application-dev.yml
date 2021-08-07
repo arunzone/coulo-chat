@@ -1,5 +1,5 @@
 db:
-  url: jdbc:postgresql
+  driver: jdbc:postgresql
   port: 5432
   name: postgres
   server: localhost

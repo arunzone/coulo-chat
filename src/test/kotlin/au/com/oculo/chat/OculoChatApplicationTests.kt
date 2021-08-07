@@ -16,6 +16,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.util.MultiValueMapAdapter
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
@@ -69,11 +70,38 @@ class OculoChatApplicationTests(
 
         val sender = UUID.fromString("83cd7615-f247-4811-8265-8d89c5615be9")
         val recipient = UUID.fromString("0fd581e1-f1b7-4a18-b146-ceeac7adadc4")
-        val baseUrl = "http://localhost:$randomServerPort/api/messages?recipient=$recipient&sender=$sender"
+        val baseUrl = "http://localhost:$randomServerPort/api/messages/senders/$sender/recipients/$recipient"
         val result: ResponseEntity<List<ViewMessageDto>> = restTemplate.exchange(
             URI(baseUrl),
             HttpMethod.GET,
             null,
+            object : ParameterizedTypeReference<List<ViewMessageDto>>() {}
+        )
+
+        val body = result.body
+        body!!.shouldContainExactly(
+            ViewMessageDto(1, "Hello", sender),
+            ViewMessageDto(2, "Wasup", sender)
+        )
+    }
+
+    @Test
+    fun `should receive messages in xml type`() {
+
+        val sender = UUID.fromString("83cd7615-f247-4811-8265-8d89c5615be9")
+        val recipient = UUID.fromString("0fd581e1-f1b7-4a18-b146-ceeac7adadc4")
+        val baseUrl = "http://localhost:$randomServerPort/api/messages/senders/$sender/recipients/$recipient"
+        val headers = MultiValueMapAdapter(
+            mapOf(
+                "Content-Type" to listOf("text/xml"),
+                "accept" to listOf("text/xml"),
+            )
+        )
+        val request: HttpEntity<MessageDto> = HttpEntity<MessageDto>(headers)
+        val result: ResponseEntity<List<ViewMessageDto>> = restTemplate.exchange(
+            URI(baseUrl),
+            HttpMethod.GET,
+            request,
             object : ParameterizedTypeReference<List<ViewMessageDto>>() {}
         )
 
