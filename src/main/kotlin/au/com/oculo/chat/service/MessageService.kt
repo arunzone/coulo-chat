@@ -25,9 +25,13 @@ class MessageService(
 
         val message = buildMessage(sender, recipients, messageDto.content)
         val savedMessage = messageRepository.save(message)
-        recipients.forEach { recipient -> emailService.send(recipient.email, message.content) }
+        senEmailFor(recipients, messageDto.content)
 
         return messagFrom(savedMessage)
+    }
+
+    private fun senEmailFor(recipients: List<User>, content: String) {
+        recipients.forEach { recipient -> emailService.send(recipient.email, content) }
     }
 
     private fun messagFrom(savedMessage: Message) = MessageDto(
