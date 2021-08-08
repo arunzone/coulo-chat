@@ -16,7 +16,8 @@ import javax.transaction.Transactional
 @Transactional
 class MessageService(
     @Autowired private val messageRepository: MessageRepository,
-    @Autowired private val userRepository: UserRepository
+    @Autowired private val userRepository: UserRepository,
+    @Autowired private val emailService: EmailService
 ) {
     fun addMessage(messageDto: MessageDto): MessageDto {
         val sender = userRepository.findById(messageDto.sender).get()
@@ -24,6 +25,7 @@ class MessageService(
 
         val message = buildMessage(sender, recipients, messageDto.content)
         val savedMessage = messageRepository.save(message)
+        recipients.forEach { recipient -> emailService.send(recipient.email, message.content) }
 
         return messagFrom(savedMessage)
     }

@@ -25,8 +25,7 @@ class MessageController(@Autowired private val messageService: MessageService) {
 
     @GetMapping(
         "/api/messages/senders/{senderId}/recipients/{recipientId}",
-        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
-        consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
     )
     fun readMessage(@PathVariable senderId: UUID, @PathVariable recipientId: UUID): List<ViewMessageDto> {
         return messageService.readMessages(senderId, recipientId)
