@@ -16,7 +16,8 @@ import java.util.*
 class MessageController(@Autowired private val messageService: MessageService) {
     @PostMapping(
         "/api/messages",
-        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_XML_VALUE]
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+        consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
     )
     fun addMessage(@RequestBody message: MessageDto): MessageDto {
         return messageService.addMessage(message)
@@ -24,7 +25,8 @@ class MessageController(@Autowired private val messageService: MessageService) {
 
     @GetMapping(
         "/api/messages/senders/{senderId}/recipients/{recipientId}",
-        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_XML_VALUE]
+        produces = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE],
+        consumes = [MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
     )
     fun readMessage(@PathVariable senderId: UUID, @PathVariable recipientId: UUID): List<ViewMessageDto> {
         return messageService.readMessages(senderId, recipientId)
