@@ -27,6 +27,12 @@ Used liquibase to separate the database concern and to keep the setup seamless. 
 allow asynchronous non-blocking chat. I haven't included any API contracts(swagger or pact). Still email service is an asynchronous call, the request
 don't have wait for email processing.
 
+## Pre-requisite
+
+1. Docker
+2. Java11
+3. curl or postman
+
 ## Run the application
 
 1. Clone the provided repo
